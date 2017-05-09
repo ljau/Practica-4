@@ -49,27 +49,27 @@ void isr_rda()
 {
    while(kbhit())
    {
-     cadenaDeCaracteres[contadorVector]=getc();//aqui guardamos la tecla sin importar cual sea en un la posicion del vector a la que corresponde pue contador de vector =0 al iniciar
-     contadorVector++;//le sumamos uno al contador para asi cambiar de posicion y si se ejecuta denuevo la interrupcion el siguiente caracter se guardara en un espacio vacio
-     if(contadorVector >= tamanoDeVector)//en esta seccion revisamos si ya se lleno el contador
-        contadorVector--;//si el vector se encuentra lleno entonces regresamos una pocsicion para sobreescribirla si  se ejeuta denuevo la instrucion
-     banderaCaracterNuevo=1;//activamos una bandera para decir que se ha encontrado un nuevo caracter
-     }
+     cadenaDeCaracteres[contadorVector]=getc();
+     contadorVector++;
+     if(contadorVector >= tamanoDeVector)
+        contadorVector--;
+     banderaCaracterNuevo=1;
+   }
    
 }
 
-void main (void){//1 esta es la funcion main aqui inicia el programa
-   setup_oscillator(OSC_16MHZ | OSC_NORMAL   );//seteamos el oscilador
-   set_tris_c(0x80);//seteamos el puesto serial en salidas y entradas
-   clear_interrupt(INT_RDA);//limpiamos la interrupcion del puerto sserial
-   enable_interrupts(INT_RDA);//habilitamos la interrupcion serial
-   enable_interrupts(GLOBAL);// habilitamos la interrupcion global
-   while(1)//2 este while se ejecutara perpetuamente
+void main (void){
+   setup_oscillator(OSC_16MHZ | OSC_NORMAL   );
+   set_tris_c(0x80);
+   clear_interrupt(INT_RDA);
+   enable_interrupts(INT_RDA);
+   enable_interrupts(GLOBAL);
+   while(1)
    {
-   if(buscarFinTrama()){//3 hace una comparacion para saber si el valor que regresa el ejecutar la funcion buscar fin de trama es diferente de cerosi es asi ejecutara el codigo dentro de este if
-      if(separacioTrama())//13 revismos si existe un separador de trama ejecutando la funcion separacion de trama
-        if(banderaEncontroSigno==1){//25si la bandera dice que encontro un signo en la trama entonces ejecuta lo dentro del if
-        seteoPirmerNumero();//26 separamos el primer numero de la trama
+   if(buscarFinTrama()){
+      if(separacioTrama())
+        if(banderaEncontroSigno==1){
+        seteoPirmerNumero();
         seteoSegundoNumero();
         revisionDeErrores();
         if(numero1encontrado==1&&numero2encontrado==1 && errorEncontrado==0)
@@ -83,14 +83,14 @@ void main (void){//1 esta es la funcion main aqui inicia el programa
    
    }
 }
-signed int buscarFinTrama(void)//4 este codigo es evaluado por la funcion if  en el paso 3 buscara donde se encuentra el carcter que asignamos como fin de trama en este caso ;
+signed int buscarFinTrama(void)
 {
    inicioDeBusqueda=1;
-   if (banderaCaracterNuevo==1){//5 si la interrupcion detecto un nuevo caracterentonces ejecutara este codigo si no se saldra y retornara un false;
-   contadorDeBusqueda=0;// 6 inicamos un contador para buscar enla siguiente posicion
-   banderaCaracterNuevo=0;  //7seteamos la bandera de caracter nuevo en 0 pues significa que ya entro a revisar los caracteres acutuamente en el buffer
+   if (banderaCaracterNuevo==1){
+   contadorDeBusqueda=0;
+   banderaCaracterNuevo=0;
 
-      while((signed)tamanoDeVector>=contadorDeBusqueda)//8ciclo para buscar el caracter;
+      while((signed)tamanoDeVector>=contadorDeBusqueda)
       {
          int auxilar= cadenaDeCaracteres[contadorDeBusqueda];
          if ((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=','&&auxilar!=';'))
@@ -100,12 +100,12 @@ signed int buscarFinTrama(void)//4 este codigo es evaluado por la funcion if  en
      
          
     
-         if(cadenaDeCaracteres[contadorDeBusqueda]==59){//9si el vector en posicion del contador( cmenzando en 0 como en el paso 6) es igual
-            banderaFinDeTrama=1;//10 activamos una bandera para decir que ya encontramos el caracter que finaliza nuestra trama
+         if(cadenaDeCaracteres[contadorDeBusqueda]==59){
+            banderaFinDeTrama=1;
 
-            return contadorDeBusqueda;}//11 retornamos el valor del contador haciendo de esta manera la condicion del if en el main true
-                  //12 en este punto retornarra a el main para ejecutar lo que esta dentro del if en el paso 13
-         contadorDeBusqueda++;//si no encuentrael caracter de fin de trama en la primer posicion cambia  ala siguiente   posicion
+            return contadorDeBusqueda;}
+                  
+         contadorDeBusqueda++;
          
       }
           if(numeroDeSignos>3)
@@ -113,38 +113,38 @@ signed int buscarFinTrama(void)//4 este codigo es evaluado por la funcion if  en
          else
                numeroDeSignos=0;
       }
-      else//si la bandera de caracter nuevo no esta acativa saldra de los sciclor retornando un valor 0 o false
+      else
       return 0;
       }
 
 
-int separacioTrama(void)//14 en esta funcion revisaremos en que posicion se encuentra el signo de operacion 
+int separacioTrama(void)
 {
-   if(banderaFinDeTrama==1)//15 verfica si se encontro un fin de trame
+   if(banderaFinDeTrama==1)
    {
-      contadorDeSeparacion=0;//16 iniciamos un contador que nos dira en que posicion de encuentra el signo
-      char auxilar=0;//17 declaramos este auxiliar para evitar sobrepasar los carcateres or linea
-      while(contadorDeBusqueda > contadorDeSeparacion)//18 si la posiccon en la que se encuenta el contador es menor que la posicion donde se encuentra el ;
+      contadorDeSeparacion=0;
+      char auxilar=0;
+      while(contadorDeBusqueda > contadorDeSeparacion)
       
       {
-         auxilar= cadenaDeCaracteres[contadorDeSeparacion];//19 convertimos el valor de de el vector en cada posicion a ale euxilira
-         if((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=',')&&contadorDeSeparacion!=0)//20 comparamossi la poscion es un + - / y *
+         auxilar= cadenaDeCaracteres[contadorDeSeparacion];
+         if((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=',')&&contadorDeSeparacion!=0)
          {
-            banderaFinDeTrama=0;//21 quitamos la bandera de fin de trama para evitar entrar dennuevo a esta opcion
-            banderaEncontroSigno=1;//22 si encuentra un signo entonces activara un bandera
-            return 1;//23 retornamos un valor para el contador de separacion
+            banderaFinDeTrama=0;
+            banderaEncontroSigno=1;
+            return 1;
          }
-         contadorDeSeparacion++;//24 sumamos uno al contador
+         contadorDeSeparacion++;
        }
    }
-   else//si no encunetra la bandera activa retornara un 0 por lo tanto no ejecutara el if del paso 13
+   else
    return 0;
 }
 
-void seteoPirmerNumero(void)//27 separa el primer numero de la trama
+void seteoPirmerNumero(void)
 {
-   char vectorAuxiliar[9]={0};//28 egregamos un vector auxiliar para introduucior la secion de la trama que corresponde
-   for(int i=0;i<contadorDeSeparacion;i++)//29 guardamos el primer numero en un vector auxiliar 
+   char vectorAuxiliar[9]={0};
+   for(int i=0;i<contadorDeSeparacion;i++)
    {
       vectorAuxiliar[i]=cadenaDeCaracteres[i];
    }
