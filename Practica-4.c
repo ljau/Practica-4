@@ -7,8 +7,8 @@
 #fuses NOPBADEN, MCLR, STVREN, NOLVP, NODEBUG
 #use delay(clock=16000000)
 #define infoDebug
-#define RX_232        PIN_C7
-#define TX_232        PIN_C6
+#define RX_232   PIN_C7
+#define TX_232   PIN_C6
 #use RS232(BAUD=9600, XMIT=TX_232, RCV=RX_232, BITS=8,PARITY=N, STOP=1)
 #use fast_io(c)
 #define tamanoDeVector 22
@@ -46,86 +46,78 @@ float numero2=0;
 float resultado=0;
 #int_rda
 void isr_rda()
-{
-   while(kbhit())
-   {
-     cadenaDeCaracteres[contadorVector]=getc();
-     contadorVector++;
-     if(contadorVector >= tamanoDeVector)
-        contadorVector--;
-     banderaCaracterNuevo=1;
-   }
+{   
+    while(kbhit())
+    {
+        cadenaDeCaracteres[contadorVector]=getc();
+        contadorVector++;
+           if(contadorVector >= tamanoDeVector)
+              contadorVector--;
+              banderaCaracterNuevo=1;
+    }
    
 }
 
-void main (void){
-   setup_oscillator(OSC_16MHZ | OSC_NORMAL   );
+void main (void)
+{
+   setup_oscillator(OSC_16MHZ|OSC_NORMAL);
    set_tris_c(0x80);
    clear_interrupt(INT_RDA);
    enable_interrupts(INT_RDA);
    enable_interrupts(GLOBAL);
    while(1)
    {
-   if(buscarFinTrama()){
-      if(separacioTrama())
-        if(banderaEncontroSigno==1){
-        seteoPirmerNumero();
-        seteoSegundoNumero();
-        revisionDeErrores();
-        if(numero1encontrado==1&&numero2encontrado==1 && errorEncontrado==0)
-           realizarOperacion();
-        reseteoDeValoresIniciales();       
-        }       
-      
-  }
-    
-   
-   
-   }
+      if(buscarFinTrama())
+      {
+         if(separacioTrama())
+            if(banderaEncontroSigno==1)
+               {
+                  seteoPirmerNumero();
+                  seteoSegundoNumero();
+                  revisionDeErrores();
+                     if(numero1encontrado==1&&numero2encontrado==1 && errorEncontrado==0)
+                        realizarOperacion();
+                        reseteoDeValoresIniciales();       
+               }       
+      }
+   } 
 }
 signed int buscarFinTrama(void)
 {
    inicioDeBusqueda=1;
-   if (banderaCaracterNuevo==1){
-   contadorDeBusqueda=0;
-   banderaCaracterNuevo=0;
-
+   if (banderaCaracterNuevo==1)
+   {
+      contadorDeBusqueda=0;
+      banderaCaracterNuevo=0;
       while((signed)tamanoDeVector>=contadorDeBusqueda)
       {
          int auxilar= cadenaDeCaracteres[contadorDeBusqueda];
          if ((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=','&&auxilar!=';'))
          {
             numeroDeSignos++;
-         }
-     
-         
-    
-         if(cadenaDeCaracteres[contadorDeBusqueda]==59){
+         }     
+         if(cadenaDeCaracteres[contadorDeBusqueda]==59)
+         {
             banderaFinDeTrama=1;
-
-            return contadorDeBusqueda;}
-                  
-         contadorDeBusqueda++;
-         
+            return contadorDeBusqueda;
+         }          
+         contadorDeBusqueda++;  
       }
-          if(numeroDeSignos>3)
-               errorExcedenteOperaciones=1;
-         else
-               numeroDeSignos=0;
-      }
+      if(numeroDeSignos>3)
+         errorExcedenteOperaciones=1;
       else
-      return 0;
-      }
-
-
+         numeroDeSignos=0;
+   }
+   else
+   return 0;
+}
 int separacioTrama(void)
 {
    if(banderaFinDeTrama==1)
    {
       contadorDeSeparacion=0;
       char auxilar=0;
-      while(contadorDeBusqueda > contadorDeSeparacion)
-      
+      while(contadorDeBusqueda > contadorDeSeparacion)      
       {
          auxilar= cadenaDeCaracteres[contadorDeSeparacion];
          if((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=',')&&contadorDeSeparacion!=0)
@@ -135,12 +127,11 @@ int separacioTrama(void)
             return 1;
          }
          contadorDeSeparacion++;
-       }
+      }
    }
    else
    return 0;
 }
-
 void seteoPirmerNumero(void)
 {
    char vectorAuxiliar[9]={0};
@@ -151,28 +142,24 @@ void seteoPirmerNumero(void)
    numero1=atof(vectorAuxiliar);
    printf("\rprimer numero");
    printf("%f",numero1);
-   numero1encontrado=1;
-   
+   numero1encontrado=1;   
 }
-void seteoSegundoNumero(void){
-    char vector[10]={0};
- for(int i=(contadorDeSeparacion+1);i<contadorDeBusqueda;i++)
- {
- 
- vector[i-(contadorDeSeparacion+1)]=cadenaDeCaracteres[i];
-
-  }
-  
-numero2=atof(vector);
-   
-      printf("\rsegundo numero");
+void seteoSegundoNumero(void)
+{
+   char vector[10]={0};
+   for(int i=(contadorDeSeparacion+1);i<contadorDeBusqueda;i++)
+   {
+      vector[i-(contadorDeSeparacion+1)]=cadenaDeCaracteres[i];
+   }  
+   numero2=atof(vector); 
+   printf("\rsegundo numero");
    printf("%f",numero2);
    if (numero2==0 && cadenaDeCaracteres[contadorDeSeparacion] == '/')
    {
       errorDivision0=1;     
    }
-banderaEncontroSigno=0;
-numero2encontrado=1;
+   banderaEncontroSigno=0;
+   numero2encontrado=1;
 }
 void revisionDeErrores (void)
 {
@@ -189,14 +176,12 @@ void revisionDeErrores (void)
          printf("\rError, exceso de operadores!");
          errorExcedenteOperaciones=0;
       }  
-   /*
-   
-   else if (errorFaltaOperador==1)
-   else if (errorFaltaDeDigito==1)
-   else if (errorDeSintaxis==1)*/
-   printf("\r\r/////////////////////////////////////\r");
-   }
-   
+      /*  
+      else if (errorFaltaOperador==1)
+      else if (errorFaltaDeDigito==1)
+      else if (errorDeSintaxis==1)*/
+      printf("\r\r/////////////////////////////////////\r");
+   }  
 }
 void reseteoDeValoresIniciales (void)
 {
@@ -214,30 +199,29 @@ void reseteoDeValoresIniciales (void)
       cadenaDeCaracteres[i]=0;
    }
    /*for (int j=0; j<10; j++)
-   {
-      
+   {    
    }*/
    ///////////////////////////////xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx
 }
 void realizarOperacion(void)
 {
-    switch(cadenaDeCaracteres[contadorDeSeparacion])
-    {
-        case('+'):
-             resultado=numero1+numero2;
-            break;
-        case('-'):
-            resultado=numero1-numero2;
-            break;
-        case('*'):
-            resultado=numero1*numero2;
-            break;
-        case('/'):
-            resultado=numero1/numero2;
-            break;
-    }
-    printf("\rel resultado es ");
-    printf("%f\r\r/////////////////////////////////////\r",resultado);
+   switch(cadenaDeCaracteres[contadorDeSeparacion])
+   {
+      case('+'):
+         resultado=numero1+numero2;
+         break;
+      case('-'):
+         resultado=numero1-numero2;
+         break;
+      case('*'):
+         resultado=numero1*numero2;
+         break;
+      case('/'):
+         resultado=numero1/numero2;
+         break;
+   }
+   printf("\rel resultado es ");
+   printf("%f\r\r/////////////////////////////////////\r",resultado);
 }
 
 
