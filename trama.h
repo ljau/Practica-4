@@ -5,6 +5,8 @@ signed int buscarFinTrama(void)
    inicioDeBusqueda=1;
    if (banderaCaracterNuevo==1)
    {
+      contadorTimer0=0;
+      contadorAlerta=0;
       contadorDeBusqueda=0;
       banderaCaracterNuevo=0;
       while((signed)tamanoDeVector>=contadorDeBusqueda)
@@ -41,7 +43,7 @@ int separacioTrama(void)
       while(contadorDeBusqueda > contadorDeSeparacion)
       {
          auxilar= cadenaDeCaracteres[contadorDeSeparacion];
-         if((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=','))
+         if((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=',')&&contadorDeSeparacion!=0)
          {
             banderaFinDeTrama=0;
             banderaEncontroSigno=1;
@@ -61,6 +63,7 @@ void seteoPirmerNumero(void)
       vectorAuxiliar[i]=cadenaDeCaracteres[i];
    }
    numero1=atof(vectorAuxiliar);
+   //printf("\rnumero uno %f\r",numero1);
    numero1encontrado=1;   
 }
 void seteoSegundoNumero(void)

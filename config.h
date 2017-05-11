@@ -40,11 +40,22 @@ int numeroDeSignos=0;
 float resultado=0;
 float numero1=0;
 float numero2=0;
+int16 contadorTimer0=0;
+int16 contadorAlerta=0;
 signed int contadorDeBusqueda=0;
+#int_timer0
+void timer_0()      
+{
+ contadorTimer0++;
+ contadorAlerta++;
+ set_timer0(0);
+}
 void configuracion(void){
    setup_oscillator(OSC_16MHZ | OSC_NORMAL   );
    set_tris_c(0x80);
    clear_interrupt(INT_RDA);
+   enable_interrupts(int_timer0);
+   setup_timer_0(RTCC_INTERNAL|RTCC_DIV_256|T0_8_BIT);
    enable_interrupts(INT_RDA);
    enable_interrupts(GLOBAL);
 }
