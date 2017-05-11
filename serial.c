@@ -9,12 +9,21 @@ void isr_rda(void)
    {
       cadenaDeCaracteres[contadorVector]=getc();
       if(cadenaDeCaracteres[contadorVector]==0x08)
-         contadorVector--;
+      {
+         if(contadorVector!=0)
+            contadorVector--;
+         else
+         {
+            cadenaDeCaracteres[contadorVector]=0;
+            break;
+         }
+      }
       else
          contadorVector++;
       if(contadorVector >= tamanoDeVector)
          contadorVector--;
       banderaCaracterNuevo=1;
    }
+   
 }
 #endif
