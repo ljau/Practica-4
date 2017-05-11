@@ -7,6 +7,11 @@
 
 void main (void)
 {
+   printf("BIENVENIDO CALCULADORA DE OPERACIONES BASICAS");
+   printf("\rInstrucciones");
+   printf("\rEscriba las operaciones de la siguiente manera");
+   printf("\rNumeroOperadorNumero;\r\r");
+   printf("\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r");
    configuracion();
    while(1)
    {
@@ -26,7 +31,7 @@ void main (void)
                }
                else
                {
-                  printf("\rno se encontro signo 0\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r");
+                  printf("\rno se encontro operador 0\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r");
                   reseteoDeValoresIniciales();
                }
                if(numero1encontrado==1&&numero2encontrado==1 && errores==0)

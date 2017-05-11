@@ -17,6 +17,12 @@ signed int buscarFinTrama(void)
          if(cadenaDeCaracteres[contadorDeBusqueda]==59)
          {
             banderaFinDeTrama=1;
+            if(contadorDeBusqueda==0)
+            {
+               printf("\r no se ingreso ningun dato\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r");      
+               reseteoDeValoresIniciales();
+               break;
+            }
             return contadorDeBusqueda;
          }          
          contadorDeBusqueda++;  

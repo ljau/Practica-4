@@ -16,5 +16,5 @@ void realizarOperacion(void)
          break;
    }
     printf("\rEl resultado es: ");
-    printf("%f\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r",resultado);
+    printf("%.4f\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r",resultado);
 }
