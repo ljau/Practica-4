@@ -13,9 +13,7 @@ signed int buscarFinTrama(void)
       {
          int auxilar= cadenaDeCaracteres[contadorDeBusqueda];
          if ((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=','&&auxilar!=';'))
-         {
-            numeroDeSignos++;
-         }     
+            numeroDeSignos++;  
          if(cadenaDeCaracteres[contadorDeBusqueda]==59)
          {
             banderaFinDeTrama=1;
@@ -23,10 +21,11 @@ signed int buscarFinTrama(void)
          }          
          contadorDeBusqueda++;  
       }
-      if(numeroDeSignos>3){
-        printf("\rError, exceso de operadores!, Intente de nuevo\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r");      
-        reseteoDeValoresIniciales();
-        break;
+      if(numeroDeSignos>3)
+      {
+         printf("\rError, exceso de operadores!, Intente de nuevo\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r");      
+         reseteoDeValoresIniciales();
+         break;
       }
       else
          numeroDeSignos=0;
@@ -53,7 +52,7 @@ int separacioTrama(void)
       }
    }
    else
-return 0;
+      return 0;
 }
 void seteoPirmerNumero(void)
 {
@@ -63,7 +62,6 @@ void seteoPirmerNumero(void)
       vectorAuxiliar[i]=cadenaDeCaracteres[i];
    }
    numero1=atof(vectorAuxiliar);
-   //printf("\rnumero uno %f\r",numero1);
    numero1encontrado=1;   
 }
 void seteoSegundoNumero(void)
@@ -76,7 +74,6 @@ void seteoSegundoNumero(void)
       p++;
       numero2encontrado=1;
    }
-  
    numero2=atof(vector);
    if(numero2==0&&cadenaDeCaracteres[contadorDeSeparacion]=='/')
       errorDivision0=1;

@@ -13,7 +13,6 @@ byte errores=0;
 #bit errorFaltaOperador=errores.2
 #bit errorExcedenteOperaciones=errores.3
 #bit errorDeSintaxis=errores.4
-//#bit errorEncontrado=errores.5
 byte banderas=0;
 #bit banderaCaracterNuevo =banderas.0
 #bit banderaFinDeTrama=banderas.1
@@ -46,11 +45,12 @@ signed int contadorDeBusqueda=0;
 #int_timer0
 void timer_0()      
 {
- contadorTimer0++;
- contadorAlerta++;
- set_timer0(0);
+   contadorTimer0++;
+   contadorAlerta++;
+   set_timer0(0);
 }
-void configuracion(void){
+void configuracion(void)
+{
    setup_oscillator(OSC_16MHZ | OSC_NORMAL   );
    set_tris_c(0x80);
    clear_interrupt(INT_RDA);

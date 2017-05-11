@@ -8,7 +8,5 @@ void reseteoDeValoresIniciales (void)
    resultado=0;
    contadorVector=0;
    for (int i=0; i<tamanoDeVector; i++)
-   {
       cadenaDeCaracteres[i]=0;
-   }
 }
