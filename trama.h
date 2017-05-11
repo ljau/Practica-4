@@ -5,19 +5,26 @@ signed int buscarFinTrama(void)
    inicioDeBusqueda=1;
    if (banderaCaracterNuevo==1)
    {
-      contadorTimer0=0;
-      contadorAlerta=0;
       contadorDeBusqueda=0;
       banderaCaracterNuevo=0;
       while((signed)tamanoDeVector>=contadorDeBusqueda)
       {
          int auxilar= cadenaDeCaracteres[contadorDeBusqueda];
          if ((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=','&&auxilar!=';'))
-            numeroDeSignos++;  
+         {
+            numeroDeSignos++;
+         }     
          if(cadenaDeCaracteres[contadorDeBusqueda]==59)
          {
             banderaFinDeTrama=1;
-            return contadorDeBusqueda;
+            if(contadorDeBusqueda==0)
+            {
+               printf("\r no se ingreso ningun dato\r\rxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx\r");      
+               reseteoDeValoresIniciales();
+               break;
+            }
+            else
+               return contadorDeBusqueda;
          }          
          contadorDeBusqueda++;  
       }
@@ -42,7 +49,7 @@ int separacioTrama(void)
       while(contadorDeBusqueda > contadorDeSeparacion)
       {
          auxilar= cadenaDeCaracteres[contadorDeSeparacion];
-         if((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=',')&&contadorDeSeparacion!=0)
+         if((auxilar>='*' && auxilar<='/')&&(auxilar!='.'&&auxilar!=','))
          {
             banderaFinDeTrama=0;
             banderaEncontroSigno=1;
@@ -52,7 +59,7 @@ int separacioTrama(void)
       }
    }
    else
-      return 0;
+return 0;
 }
 void seteoPirmerNumero(void)
 {
@@ -74,6 +81,7 @@ void seteoSegundoNumero(void)
       p++;
       numero2encontrado=1;
    }
+  
    numero2=atof(vector);
    if(numero2==0&&cadenaDeCaracteres[contadorDeSeparacion]=='/')
       errorDivision0=1;
